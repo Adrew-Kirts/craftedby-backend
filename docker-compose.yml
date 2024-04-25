@@ -1,0 +1,12 @@
+services:
+  app:
+    image: adrewkirts/crafted-by_backend
+    ports:
+      - "8000:80"
+
+    networks:
+      - common_network
+
+networks:
+  common_network:
+    external: true

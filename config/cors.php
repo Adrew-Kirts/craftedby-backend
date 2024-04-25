@@ -19,13 +19,17 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+//    'allowed_origins' => ['*'],
+
+    'allowed_origins' => ['https://fabriquepar.com'],
 
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['Access-Control-Allow-Origin'],
+
+//    'exposed_headers' => [],
 
     'max_age' => 0,
 
