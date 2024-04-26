@@ -35,7 +35,7 @@ jobs:
         run: docker push adrewkirts/crafted-by_backend:${{ needs.read_version.outputs.version }}
 
   deploy_to_server:
-    needs: build_and_push_image
+    needs: read_version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
