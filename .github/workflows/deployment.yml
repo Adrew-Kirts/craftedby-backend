@@ -1,4 +1,4 @@
-name: CraftedBy Backend server deploy
+name: CraftedBy Backend Server Deploy
 
 on:
   push:
@@ -16,8 +16,7 @@ jobs:
         name: Checkout code
       - name: Read Version
         id: version
-        run: |
-          echo "::set-output name=version::$(cat version.txt)"
+        run: echo "::set-output name=version::$(cat version.txt)"
 
   build_and_push_image:
     needs: read_version
@@ -41,6 +40,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Checkout code
+      - name: Initialize Environment Variable
+        run: echo "VERSION=${{ needs.read_version.outputs.version }}" >> $GITHUB_ENV
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.4
         with:
@@ -49,10 +50,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd dockerfiles/backend/
-            echo "Before sed:"
-            cat docker-compose.yml
-            sed -i "s|adrewkirts/crafted-by_backend:.*|adrewkirts/crafted-by_backend:${{ needs.build_and_push_image.outputs.version }}|g" docker-compose.yml
-            echo "After sed:"
-            cat docker-compose.yml
-            sudo docker pull adrewkirts/crafted-by_backend:${{ needs.build_and_push_image.outputs.version }}
+            sed -i "s|adrewkirts/crafted-by_backend:.*|adrewkirts/crafted-by_backend:${{ env.VERSION }}|g" docker-compose.yml
+            sudo docker pull adrewkirts/crafted-by_backend:${{ env.VERSION }}
             sudo docker compose up -d
