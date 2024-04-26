@@ -49,6 +49,10 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd dockerfiles/backend/
+            echo "Before sed:"
+            cat docker-compose.yml
             sed -i "s|adrewkirts/crafted-by_backend:.*|adrewkirts/crafted-by_backend:${{ needs.build_and_push_image.outputs.version }}|g" docker-compose.yml
+            echo "After sed:"
+            cat docker-compose.yml
             sudo docker pull adrewkirts/crafted-by_backend:${{ needs.build_and_push_image.outputs.version }}
             sudo docker compose up -d
