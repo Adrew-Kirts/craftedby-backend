@@ -83,6 +83,9 @@ Route::get('/current-user', [AuthController::class, 'currentUser']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/password/reset-link', [ResetPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
+Route::middleware('auth:sanctum')->get('/sanctum/csrf-cookie', function (Request $request) {
+    return response()->json(['message' => 'CSRF cookie set']);
+});
 
 //Stripe payment
 Route::post('/payment/initiate', [StripeController::class, 'initiatePayment']);
