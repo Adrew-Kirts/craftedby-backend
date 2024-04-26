@@ -19,11 +19,18 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('fr_FR');
-        // Generate the image and store the path
-        $imageFullPath = $faker->image('public/images/products', 640, 480, null, false, true, 'Artisanal Product', false);
 
-        // Remove the 'public/' part from the path
-        $imagePath = str_replace('public/', '', $imageFullPath);
+//        // Generate the image and store the path
+//        $imageFullPath = $faker->image('public/images/products', 640, 480, null, false, true, 'Artisanal Product', false);
+//        // Remove the 'public/' part from the path
+//        $imagePath = str_replace('public/', '', $imageFullPath);
+
+        $imagePaths = [];
+        for ($i = 1; $i <= 9; $i++) {
+            $imagePaths[] = "public/image{$i}.png";
+        }
+        $imagePath = $faker->randomElement($imagePaths);
+
         return [
             'name' => $faker->word,
             'description' => $faker->sentence,
