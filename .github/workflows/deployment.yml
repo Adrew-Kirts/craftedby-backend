@@ -7,43 +7,31 @@ on:
       - 'version.txt'
 
 jobs:
-  read_version:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-    steps:
-      - uses: actions/checkout@v3
-        name: Checkout code
-      - name: Read Version
-        id: version
-        run: echo "::set-output name=version::$(cat version.txt)"
-
   build_and_push_image:
-    needs: read_version
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ needs.read_version.outputs.version }}
     steps:
       - uses: actions/checkout@v3
         name: Checkout code
+      - name: Set Version Environment Variable
+        run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
       - name: Build Docker image
-        run: docker build . -t adrewkirts/crafted-by_backend:latest -t adrewkirts/crafted-by_backend:${{ needs.read_version.outputs.version }}
+        run: docker build . -t adrewkirts/crafted-by_backend:latest -t adrewkirts/crafted-by_backend:$VERSION
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push Docker Image
-        run: docker push adrewkirts/crafted-by_backend:${{ needs.read_version.outputs.version }}
+        run: docker push adrewkirts/crafted-by_backend:$VERSION
 
   deploy_to_server:
-    needs: build_and_push_image
     runs-on: ubuntu-latest
+    needs: build_and_push_image
     steps:
       - uses: actions/checkout@v3
         name: Checkout code
-      - name: Initialize Environment Variable
-        run: echo "VERSION=${{ needs.build_and_push_image.outputs.version }}" >> $GITHUB_ENV
+      - name: Set Version Environment Variable
+        run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.4
         with:
@@ -52,6 +40,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd dockerfiles/backend/
-            sed -i "s|adrewkirts/crafted-by_backend:.*|adrewkirts/crafted-by_backend:${{ env.VERSION }}|g" docker-compose.yml
-            sudo docker pull adrewkirts/crafted-by_backend:${{ env.VERSION }}
+            sed -i "s|adrewkirts/crafted-by_backend:.*|adrewkirts/crafted-by_backend:$VERSION|g" docker-compose.yml
+            sudo docker pull adrewkirts/crafted-by_backend:$VERSION
             sudo docker compose up -d
