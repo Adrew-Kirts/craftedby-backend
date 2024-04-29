@@ -12,6 +12,7 @@ use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UsersController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| bed assigned to the "api" midleware group. Make something great!
 |
 */
 
@@ -83,7 +84,7 @@ Route::get('/current-user', [AuthController::class, 'currentUser']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/password/reset-link', [ResetPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
-Route::middleware('auth:sanctum')->get('/sanctum/csrf-cookie', function (Request $request) {
+Route::get('/sanctum/csrf-cookie', function (Request $request) {
     return response()->json(['message' => 'CSRF cookie set']);
 });
 
