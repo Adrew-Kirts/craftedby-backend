@@ -27,7 +27,7 @@ class ProductFactory extends Factory
 
         $imagePaths = [];
         for ($i = 1; $i <= 9; $i++) {
-            $imagePaths[] = "public/image{$i}.png";
+            $imagePaths[] = "image{$i}.png";
         }
         $imagePath = $faker->randomElement($imagePaths);
 
