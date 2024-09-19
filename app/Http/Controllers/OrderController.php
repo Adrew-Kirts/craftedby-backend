@@ -138,7 +138,8 @@ class OrderController extends Controller
         //Pass the order param to request
         $request->merge(['order' => true]);
 
-        $order = Order::find($id);
+//        $order = Order::find($id);
+        $order = Order::with('products')->findOrFail($id);
 
         if (!$order) {
             throw new ModelNotFoundException('Order not found');
