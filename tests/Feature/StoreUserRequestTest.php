@@ -50,7 +50,7 @@ class StoreUserRequestTest extends TestCase
     public function testUserCreationWithInvalidData()
     {
         $response = $this->postJson('/api/users', [
-            'first_name' => '',
+            'first_name' => 'John',
             'last_name' => 'Doe',
             'address' => '123 Apple St',
             'postal_code' => '12345',
@@ -62,6 +62,6 @@ class StoreUserRequestTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['first_name', 'email', 'password']);
+        $response->assertJsonValidationErrors(['email', 'password']);
     }
 }

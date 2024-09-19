@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -74,6 +75,9 @@ Route::get('/specialties', [SpecialtyController::class, 'index']);
 
 //Themes
 Route::get('/themes', [ThemeController::class, 'index']);
+
+//Colors
+Route::get('/colors', [ColorController::class, 'index']);
 
 //Materials
 Route::get('/materials', [MaterialController::class, 'index']);
