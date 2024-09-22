@@ -144,6 +144,10 @@ class ProductController extends Controller
             $customisable = $request->input('customisable');
             $query->where('customisable', '=', $customisable);
         }
+        if ($request->filled('businessId')) {
+            $businessId = $request->input('businessId');
+            $query->where('business_id', '=', $businessId);
+        }
 
         //Execute query (with eager loading) and get results
 //        $products = $query->with('business', 'material', 'color', 'reviews')->get();
