@@ -92,11 +92,14 @@ class BusinessController extends Controller
      *     @OA\Response(response=404, description="Business not found")
      * )
      */
-    public function show(Request $request, $id) : BusinessResource
+    public function show(Request $request, $id)
     {
         $request->merge(['business' => true]);
 
         $business = Business::findOrFail($id);
+        if (!$business) {
+            return response()->json(['message' => 'Business not found'], 404);
+        }
         return new BusinessResource($business);
 
     }
